@@ -1,10 +1,6 @@
 import requests
 import os
-import json
-from requests import status_codes
-from requests.api import head
 from selenium import webdriver
-import discord
 import sys
 import time
 import inspect
@@ -220,5 +216,3 @@ def spam_mail(token):
 			time.sleep(1)
 	except KeyboardInterrupt:
 		logo()
-
-
