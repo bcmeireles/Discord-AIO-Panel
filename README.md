@@ -6,6 +6,10 @@ Discord Panel is an AIO panel for [Discord](https://discord.com) that aims to ha
 
 You can contribute through Pull Requests if you wish to help me on what's yet unfinished.
 
+### Panel
+
+- [ ] Interactive menu for all options
+
 ### Token Tools
 - [x] Login to account using selenium
 - [x] Account information grabber~
@@ -16,9 +20,8 @@ You can contribute through Pull Requests if you wish to help me on what's yet un
 - [x] Leave all servers
 - [x] Create empty servers until the limit is reached
 - [x] Language + Light/Dark mode change spam
-- [ ] Custom status spam
-- [ ] Spam e-mail by removing e-mail and requesting verification
-- [ ] Get token banned for underaged
+- [x] Custom status spam
+- [x] Spam e-mail by removing e-mail and requesting verification
 
 ### Raid Tools
 
