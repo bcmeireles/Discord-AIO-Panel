@@ -9,11 +9,6 @@ currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir) 
 from panel import logo
-import asyncio
-import platform
-if platform.system() == 'Windows':
-	asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
 
 lang_codes = ["en-US", "en-GB", "zh-CN", "zh-TW", "cs", "da", "nl", "fr", "de", "el", "hu", "it", "ja", "ko", "no", "pl", "pt-BR", "ru", "es-ES", "sv-SE", "th", "tr", "bg", "uk", "fi", "hr", "ro", "lt"]
 codetolang = {
