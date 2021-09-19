@@ -15,8 +15,7 @@ You can contribute through Pull Requests if you wish to help me on what's yet un
 - [x] Delete all possible servers
 - [x] Leave all servers
 - [x] Create empty servers until the limit is reached
-- [ ] Language change spam
-- [ ] Light/Dark mode change spam
+- [x] Language + Light/Dark mode change spam
 - [ ] Custom status spam
 - [ ] Spam e-mail by removing e-mail and requesting verification
 - [ ] Get token banned for underaged

