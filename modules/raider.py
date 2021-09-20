@@ -9,6 +9,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir) 
 from panel import logo
 
+
 def load_tokens():
     token_list = []
     with open('tokens.txt', 'r') as f:
@@ -21,7 +22,8 @@ def load_proxies():
     with open('proxies.txt', 'r') as d:
         for p in d.read().split('\n'):
             proxies_list.append(p)
-
+    print(proxies_list)
+    return proxies_list
 
 def token_checker(token_list, proxies_list='n'):
     invalid = 0
@@ -61,6 +63,27 @@ def token_checker(token_list, proxies_list='n'):
 
     return good_tokens
 
+def proxy_checker(proxies_list):
+    sys.stdout.write('Starting checker...\n\n')
+    sys.stdout.flush()
+    count = 0
+    good = 0
+    bad = 0
+    good_proxies = []
+    for proxy in proxies_list:
+        try:
+            requests.get('http://www.httpbin.org/ip',proxies = {'https' : proxy, 'http' : proxy} ,timeout = 1)
+            good += 1
+            good_proxies.append(proxy)
+            sys.stdout.write(f'\rGood: {good} | Bad: {bad} | Left: {len(proxies_list) - count}')
+            sys.stdout.flush()
+        except:
+            bad += 1
+            sys.stdout.write(f'\rGood: {good} | Bad: {bad} | Left: {len(proxies_list) - count}')
+            sys.stdout.flush()
+
+    return good_proxies
+
 def joiner(code, token_list, proxies_list='n'):
     sys.stdout.write(f'Joining with {len(token_list)} accounts...\n\n')
     sys.stdout.flush()
@@ -74,7 +97,7 @@ def joiner(code, token_list, proxies_list='n'):
                     'https': proxy
                 }, timeout=10)
         else:
-            requests.post(f'https://discord.com/api/v9/invites/{code}', headers = {'Authorization': token})
+            requests.post(f'https://discord.com/api/v9/invites/{code}', headers = {'Authorization': token, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36'})
         sys.stdout.write(f'\rJoined: {count} | Remaining: {len(token_list) - count}')
         sys.stdout.flush()
 
@@ -91,8 +114,6 @@ def leaver(serverid, token_list, proxies_list='n'):
                     'https': proxy
                 }, timeout=10)
         else:
-            r2 = requests.delete(f'https://discord.com/api/v9/users/@me/guilds/{serverid}', headers = {'Authorization': token})
-            print(r2)
-            print(r2.json())
+            r2 = requests.delete(f'https://discord.com/api/v9/users/@me/guilds/{serverid}', headers = {'Authorization': token, 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36'})
         sys.stdout.write(f'\rLeft: {count} | Remaining: {len(token_list) - count}')
         sys.stdout.flush()
