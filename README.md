@@ -25,8 +25,8 @@ You can contribute through Pull Requests if you wish to help me on what's yet un
 
 ### Raid Tools
 
-- [ ] Token checker
-- [ ] Mass join/leave
+- [x] Token checker
+- [x] Mass join/leave
 - [ ] Mass react
 - [ ] Bypassing some verification bots
 - [ ] Ping spam
